@@ -40,6 +40,9 @@ export const Demo = ({
   const [customUrl, setCustomUrl] = useState('https://en.wikipedia.org');
   const [isOverlayActive, setIsOverlayActive] = useState(true);
   const [showSuccessFlash, setShowSuccessFlash] = useState(false);
+  const [bypassStep, setBypassStep] = useState('idle');
+  const [isBypassed, setIsBypassed] = useState(false);
+  const [showBypassToast, setShowBypassToast] = useState(false);
 
   const math = useMathChallenge();
   const intent = useIntentChallenge();
@@ -53,6 +56,8 @@ export const Demo = ({
 
   const startFlow = () => {
     setIsOverlayActive(true);
+    setBypassStep('idle');
+    setIsBypassed(false);
     timer.startTimer();
     if (challengeType === 'math') {
       math.generateNew();
@@ -109,9 +114,18 @@ export const Demo = ({
     timer.stopTimer();
   };
 
-  const handleBypass = () => {
-    setIsOverlayActive(false);
-    timer.stopTimer();
+  const handleBypassInitiate = () => setBypassStep('awareness');
+  const handleBypassContinue = () => setBypassStep('reason');
+  const handleBypassCancel = () => setBypassStep('idle');
+  const handleBypassReason = (reason) => {
+    setBypassStep('delay');
+    setTimeout(() => {
+      setIsOverlayActive(false);
+      setShowBypassToast(true);
+      setIsBypassed(true);
+      setTimeout(() => setShowBypassToast(false), 2500);
+      timer.stopTimer();
+    }, 2000);
   };
 
   const siteLabel = currentSite === 'custom' ? customUrl : siteNames[currentSite];
@@ -120,15 +134,16 @@ export const Demo = ({
   return (
     <div className={styles.demoSection} id="demo">
       {showSuccessFlash ? <div className={styles.successFlash}>Access granted — attention paid.</div> : null}
+      {showBypassToast ? <div className={styles.successFlash}>Entered without focus</div> : null}
       <div className={styles.header}>
         <div className={styles.title}>Live demo</div>
         <div className={styles.subtitle}>// pick a site, trigger the tax</div>
       </div>
 
       <BrowserChrome urlBar={urlBar}>
-        <SiteSelector 
-          currentSite={currentSite} 
-          onSiteChange={handleSiteChange} 
+        <SiteSelector
+          currentSite={currentSite}
+          onSiteChange={handleSiteChange}
           customUrl={customUrl}
           onCustomUrlChange={setCustomUrl}
         />
@@ -139,84 +154,117 @@ export const Demo = ({
           {currentSite === 'reddit' ? <Reddit /> : null}
           {currentSite === 'youtube' ? <YouTube /> : null}
           {currentSite === 'custom' ? (
-            <iframe 
-              src={customUrl} 
-              className={styles.iframeSite} 
+            <iframe
+              src={customUrl}
+              className={styles.iframeSite}
               title="Custom site"
               sandbox="allow-scripts allow-same-origin"
             />
           ) : null}
 
+          {isBypassed && !isOverlayActive ? <div className={styles.researchBadge}>Research Mode</div> : null}
+
           {isOverlayActive ? (
             <div className={styles.focusOverlay}>
-              <div className={styles.overlayTag}>// focus tax</div>
-              <div className={styles.overlayHeading}>Before you scroll —</div>
-              <div className={styles.overlaySub}>
-                Pay {timerDuration} seconds of attention to proceed to <span>{siteLabel}</span>
-              </div>
+              {bypassStep === 'idle' && (
+                <>
+                  <div className={styles.overlayTag}>// focus tax</div>
+                  <div className={styles.overlayHeading}>Before you scroll —</div>
+                  <div className={styles.overlaySub}>
+                    Pay {timerDuration} seconds of attention to proceed to <span>{siteLabel}</span>
+                  </div>
 
-              <div className={styles.timerRingWrap}>
-                <svg width="100" height="100" viewBox="0 0 100 100">
-                  <circle className={styles.timerTrack} cx="50" cy="50" r="45" />
-                  <circle
-                    className={styles.timerProgress}
-                    cx="50"
-                    cy="50"
-                    r="45"
-                    style={{ strokeDashoffset: 283 * (1 - timer.timeLeft / timerDuration) }}
+                  <div className={styles.timerRingWrap}>
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                      <circle className={styles.timerTrack} cx="50" cy="50" r="45" />
+                      <circle
+                        className={styles.timerProgress}
+                        cx="50"
+                        cy="50"
+                        r="45"
+                        style={{ strokeDashoffset: 283 * (1 - timer.timeLeft / timerDuration) }}
+                      />
+                    </svg>
+                    <div className={styles.timerCenter}>
+                      <div className={styles.timerNum}>{timer.timeLeft}</div>
+                      <div className={styles.timerLabel}>sec</div>
+                    </div>
+                  </div>
+
+                  <div className={styles.challengeTabs}>
+                    <button className={`${styles.challengeTab} ${challengeType === 'math' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('math')}>
+                      math
+                    </button>
+                    <button className={`${styles.challengeTab} ${challengeType === 'intent' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('intent')}>
+                      intent
+                    </button>
+                    <button className={`${styles.challengeTab} ${challengeType === 'puzzle' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('puzzle')}>
+                      puzzle
+                    </button>
+                    <button className={`${styles.challengeTab} ${challengeType === 'wait' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('wait')}>
+                      just wait
+                    </button>
+                  </div>
+
+                  <ChallengePanel
+                    mode={challengeType}
+                    mathQuestion={math.question || 'Loading...'}
+                    mathInput={math.userInput}
+                    mathIsCorrect={math.isCorrect}
+                    onMathChange={math.checkAnswer}
+                    intentValue={intent.value}
+                    intentCharCount={intent.charCount}
+                    intentMinChars={intent.minChars}
+                    intentIsValid={intent.isValid}
+                    onIntentChange={intent.handleChange}
+                    puzzleWord={puzzle.scrambledWord}
+                    puzzleInput={puzzle.userInput}
+                    puzzleIsCorrect={puzzle.isCorrect}
+                    onPuzzleChange={puzzle.checkAnswer}
+                    puzzleIsLoading={puzzle.isLoading}
                   />
-                </svg>
-                <div className={styles.timerCenter}>
-                  <div className={styles.timerNum}>{timer.timeLeft}</div>
-                  <div className={styles.timerLabel}>sec</div>
+
+                  <button className={`${styles.proceedButton} ${canProceed ? styles.ready : ''}`} disabled={!canProceed} onClick={handleProceed}>
+                    Continue to site →
+                  </button>
+                  {!strictMode ? (
+                    <button className={styles.bypassButton} onClick={handleBypassInitiate}>
+                      Enter without focus
+                    </button>
+                  ) : null}
+
+                  <div className={styles.overlayQuote}>
+                    "You chose to slow down. What will you do with the attention you just protected?"
+                  </div>
+                </>
+              )}
+
+              {bypassStep === 'awareness' && (
+                <div className={styles.bypassCard}>
+                  <div className={styles.bypassHeading}>Continue without focus validation?</div>
+                  <div className={styles.bypassActions}>
+                    <button className={styles.bypassContinueBtn} onClick={handleBypassContinue}>Continue</button>
+                    <button className={styles.bypassCancelBtn} onClick={handleBypassCancel}>Go back</button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className={styles.challengeTabs}>
-                <button className={`${styles.challengeTab} ${challengeType === 'math' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('math')}>
-                  math
-                </button>
-                <button className={`${styles.challengeTab} ${challengeType === 'intent' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('intent')}>
-                  intent
-                </button>
-                <button className={`${styles.challengeTab} ${challengeType === 'puzzle' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('puzzle')}>
-                  puzzle
-                </button>
-                <button className={`${styles.challengeTab} ${challengeType === 'wait' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('wait')}>
-                  just wait
-                </button>
-              </div>
+              {bypassStep === 'reason' && (
+                <div className={styles.bypassCard}>
+                  <div className={styles.bypassHeading}>Reason for quick access?</div>
+                  <div className={styles.reasonButtons}>
+                    <button className={styles.reasonBtn} onClick={() => handleBypassReason('Quick check')}>Quick check</button>
+                    <button className={styles.reasonBtn} onClick={() => handleBypassReason('Research')}>Research</button>
+                    <button className={styles.reasonBtn} onClick={() => handleBypassReason('Just browsing')}>Just browsing</button>
+                  </div>
+                </div>
+              )}
 
-              <ChallengePanel
-                mode={challengeType}
-                mathQuestion={math.question || 'Loading...'}
-                mathInput={math.userInput}
-                mathIsCorrect={math.isCorrect}
-                onMathChange={math.checkAnswer}
-                intentValue={intent.value}
-                intentCharCount={intent.charCount}
-                intentMinChars={intent.minChars}
-                intentIsValid={intent.isValid}
-                onIntentChange={intent.handleChange}
-                puzzleWord={puzzle.scrambledWord}
-                puzzleInput={puzzle.userInput}
-                puzzleIsCorrect={puzzle.isCorrect}
-                onPuzzleChange={puzzle.checkAnswer}
-                puzzleIsLoading={puzzle.isLoading}
-              />
-
-              <button className={`${styles.proceedButton} ${canProceed ? styles.ready : ''}`} disabled={!canProceed} onClick={handleProceed}>
-                Continue to site →
-              </button>
-              {!strictMode ? (
-                <button className={styles.bypassButton} onClick={handleBypass}>
-                  skip (research mode)
-                </button>
-              ) : null}
-
-              <div className={styles.overlayQuote}>
-                "You chose to slow down. What will you do with the attention you just protected?"
-              </div>
+              {bypassStep === 'delay' && (
+                <div className={styles.bypassCard}>
+                  <div className={styles.delayText}>Preparing quick access...</div>
+                </div>
+              )}
             </div>
           ) : null}
         </div>
