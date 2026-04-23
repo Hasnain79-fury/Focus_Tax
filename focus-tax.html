@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus Tax — Pay attention before you spend it</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1714;
+    --paper: #f5f0e8;
+    --paper2: #ede8dc;
+    --paper3: #e4ddd0;
+    --accent: #c84b1f;
+    --accent2: #2d5a3d;
+    --muted: #7a7268;
+    --border: rgba(26,23,20,0.12);
+    --border-strong: rgba(26,23,20,0.25);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Fraunces', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5rem 2rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--accent);
+    opacity: 0.4;
+    max-width: 80px;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-body {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 560px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-body strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 14px 28px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--accent); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    padding: 14px 28px;
+    background: transparent;
+    color: var(--ink);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 13px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { background: var(--paper2); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── STANCE SECTION ── */
+  .stance {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .stance-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding-top: 6px;
+  }
+
+  .stance-body {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .stance-body strong {
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    background: var(--paper2);
+    padding: 4rem 2rem;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .how-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .how-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .how-step {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .step-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .step-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── DEMO SECTION ── */
+  .demo-section {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .demo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .demo-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .demo-subtitle {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── BROWSER CHROME ── */
+  .browser {
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(26,23,20,0.1);
+  }
+
+  .browser-bar {
+    background: var(--paper3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+
+  .browser-url {
+    flex: 1;
+    background: var(--paper);
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .url-lock { color: var(--accent2); font-size: 10px; }
+
+  /* ── SITE SELECTOR ── */
+  .site-selector {
+    background: var(--paper);
+    padding: 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .site-selector-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+
+  .site-pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 0.5px solid var(--border-strong);
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+
+  .site-pill:hover { background: var(--paper2); }
+  .site-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── SIMULATED SITE ── */
+  .simulated-site {
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+  }
+
+  /* Twitter sim */
+  .site-twitter {
+    background: #fff;
+    padding: 0;
+  }
+
+  .twitter-header {
+    display: flex;
+    border-bottom: 1px solid #eff3f4;
+    padding: 12px 16px;
+    gap: 24px;
+  }
+
+  .tw-tab {
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #536471;
+    padding: 8px 4px;
+    cursor: pointer;
+  }
+
+  .tw-tab.active { color: #0f1419; border-bottom: 2px solid #1d9bf0; }
+
+  .tw-feed { padding: 0; }
+
+  .tw-post {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eff3f4;
+  }
+
+  .tw-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e7e7e7;
+    flex-shrink: 0;
+  }
+
+  .tw-avatar.blue { background: #1d9bf0; }
+  .tw-avatar.green { background: #00ba7c; }
+  .tw-avatar.purple { background: #7856ff; }
+
+  .tw-content { flex: 1; }
+
+  .tw-name {
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f1419;
+    display: inline;
+  }
+
+  .tw-handle {
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    color: #536471;
+    margin-left: 4px;
+  }
+
+  .tw-text {
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    color: #0f1419;
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  .tw-actions {
+    display: flex;
+    gap: 32px;
+    margin-top: 12px;
+  }
+
+  .tw-action {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: #536471;
+  }
+
+  /* Reddit sim */
+  .site-reddit {
+    background: #dae0e6;
+    padding: 16px;
+  }
+
+  .rd-post {
+    background: white;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .rd-votes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 32px;
+  }
+
+  .rd-arrow { font-size: 18px; color: #878a8c; cursor: pointer; }
+  .rd-arrow.up { color: #ff4500; }
+  .rd-score { font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: #1c1c1c; }
+
+  .rd-body { flex: 1; }
+
+  .rd-sub {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1c1c1c;
+  }
+
+  .rd-title {
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #222;
+    margin: 4px 0;
+    line-height: 1.3;
+  }
+
+  .rd-meta {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: #878a8c;
+  }
+
+  /* YouTube sim */
+  .site-youtube {
+    background: #f9f9f9;
+    padding: 16px;
+  }
+
+  .yt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .yt-card { cursor: pointer; }
+
+  .yt-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .yt-thumb.a { background: linear-gradient(135deg, #ff6b35, #f7931e); }
+  .yt-thumb.b { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .yt-thumb.c { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .yt-thumb.d { background: linear-gradient(135deg, #fc466b, #3f5efb); }
+  .yt-thumb.e { background: linear-gradient(135deg, #f7971e, #ffd200); }
+  .yt-thumb.f { background: linear-gradient(135deg, #43cea2, #185a9d); }
+
+  .yt-info { display: flex; gap: 8px; }
+  .yt-ch-icon { width: 32px; height: 32px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+  .yt-title { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 500; color: #0f0f0f; line-height: 1.3; }
+  .yt-sub { font-family: -apple-system, sans-serif; font-size: 12px; color: #606060; margin-top: 3px; }
+
+  /* ── OVERLAY ── */
+  .focus-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 17, 14, 0.97);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .focus-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .overlay-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .overlay-heading {
+    font-family: var(--serif);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--paper);
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    max-width: 480px;
+  }
+
+  .overlay-sub {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(245,240,232,0.5);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+  /* Timer ring */
+  .timer-ring-wrap {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .timer-ring-wrap svg {
+    transform: rotate(-90deg);
+  }
+
+  .timer-track {
+    fill: none;
+    stroke: rgba(245,240,232,0.08);
+    stroke-width: 4;
+  }
+
+  .timer-progress {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+  }
+
+  .timer-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timer-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--paper);
+    line-height: 1;
+  }
+
+  .timer-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+  }
+
+  /* Challenge modes */
+  .challenge-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border: 0.5px solid rgba(245,240,232,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .challenge-tab {
+    padding: 8px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(245,240,232,0.4);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .challenge-tab.active {
+    background: rgba(245,240,232,0.1);
+    color: var(--paper);
+  }
+
+  .challenge-panel { display: none; width: 100%; max-width: 380px; }
+  .challenge-panel.active { display: block; }
+
+  /* Math challenge */
+  .math-question {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--paper);
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .math-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(245,240,232,0.07);
+    border: 0.5px solid rgba(245,240,232,0.2);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--paper);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .math-input:focus { border-color: rgba(245,240,232,0.5); }
+  .math-input.error { border-color: var(--accent); animation: shake 0.3s; }
+  .math-input.correct { border-color: var(--accent2); }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Intent challenge */
+  .intent-prompt {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(245,240,232,0.6);
+    text-align: center;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .intent-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(245,240,232,0.07);
+    border: 0.5px solid rgba(245,240,232,0.2);
+    border-radius: 3px;
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--paper);
+    outline: none;
+    resize: none;
+    min-height: 80px;
+    transition: border-color 0.15s;
+  }
+
+  .intent-input:focus { border-color: rgba(245,240,232,0.5); }
+  .intent-char {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(245,240,232,0.3);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  /* Proceed button */
+  .overlay-proceed {
+    margin-top: 1.5rem;
+    padding: 12px 32px;
+    background: var(--paper);
+    color: var(--ink);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    opacity: 0.4;
+  }
+
+  .overlay-proceed.ready {
+    opacity: 1;
+    background: var(--paper);
+  }
+
+  .overlay-proceed.ready:hover { background: var(--accent); color: white; }
+
+  .overlay-bypass {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(245,240,232,0.25);
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+
+  .overlay-bypass:hover { color: rgba(245,240,232,0.5); }
+
+  .overlay-quote {
+    position: absolute;
+    bottom: 1.5rem;
+    font-family: var(--serif);
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(245,240,232,0.2);
+    text-align: center;
+    max-width: 400px;
+    line-height: 1.5;
+  }
+
+  /* ── SETTINGS PANEL ── */
+  .settings {
+    padding: 4rem 2rem;
+    background: var(--paper2);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .settings-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .settings-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .setting-card {
+    background: var(--paper);
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+  }
+
+  .setting-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .setting-card-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border-strong);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+
+  .toggle input:checked + .toggle-slider { background: var(--accent2); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .slider-wrap input[type=range] {
+    flex: 1;
+    accent-color: var(--ink);
+  }
+
+  .slider-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* ── PLAN SECTION ── */
+  .plan {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .plan-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .plan-day {
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .plan-day-header {
+    padding: 1rem 1.25rem;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .plan-day-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .plan-day-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.5);
+  }
+
+  .plan-tasks { padding: 1rem 1.25rem; background: var(--paper); }
+
+  .plan-task {
+    display: flex;
+    gap: 10px;
+    padding: 0.6rem 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .plan-task:last-child { border-bottom: none; }
+
+  .task-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 30px;
+  }
+
+  .task-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .task-text strong { font-weight: 700; }
+
+  /* ── STACK ── */
+  .stack {
+    background: var(--paper2);
+    padding: 4rem 2rem;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .stack-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .stack-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .stack-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .stack-chip {
+    padding: 8px 16px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper);
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .footer-stance {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 400px;
+    text-align: right;
+  }
+
+  /* ── SUCCESS STATE ── */
+  .success-flash {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: var(--accent2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    z-index: 999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .success-flash.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .stance { grid-template-columns: 1fr; gap: 1rem; }
+    .how-steps { grid-template-columns: 1fr; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .yt-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero { animation: fadeIn 0.6s ease both; }
+  .hero-eyebrow { animation: fadeIn 0.5s ease 0.1s both; }
+  .hero-body { animation: fadeIn 0.5s ease 0.2s both; }
+  .hero-cta { animation: fadeIn 0.5s ease 0.3s both; }
+</style>
+</head>
+<body>
+
+<div class="success-flash" id="successFlash">Access granted — attention paid.</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Focus<span>Tax</span></a>
+  <div class="nav-tag">// friction as a feature</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Hackathon concept</div>
+  <h1 class="hero-title">Pay<br><em>attention</em><br>before<br>you spend it.</h1>
+  <p class="hero-body">
+    We spent decades removing friction from the web. <strong>We got that wrong.</strong>
+    Focus Tax adds deliberate friction before distraction sites — not to block you, but to make you choose.
+  </p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn-primary">Try the demo</a>
+    <a href="#plan" class="btn-secondary">See the build plan</a>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- STANCE -->
+<div class="stance">
+  <div class="stance-label">// the position</div>
+  <div class="stance-body">
+    Attention is the only non-renewable resource you have.
+    Every scroll, autoplay, and infinite feed was engineered to harvest it without asking.
+    <br><br>
+    <strong>Focus Tax doesn't block the site. It bills you first.</strong>
+    You can always pay and proceed. But you have to choose to.
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="how-inner">
+    <div class="how-title">// how it works</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">01</div>
+        <div class="step-title">You visit a distraction site</div>
+        <div class="step-desc">Twitter, Reddit, YouTube. The page starts to load. Focus Tax intercepts before you can scroll.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">02</div>
+        <div class="step-title">Pay the tax</div>
+        <div class="step-desc">Solve a simple math problem or write one sentence about why you're here. The friction takes 15 seconds. That's the point.</div>
+      </div>
+      <div class="how-step">
+        <div class="step-num">03</div>
+        <div class="step-title">Proceed with intention</div>
+        <div class="step-desc">The page reveals. You chose to be here. That changes everything about how you use the next 10 minutes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO -->
+<div class="demo-section" id="demo">
+  <div class="demo-header">
+    <div class="demo-title">Live demo</div>
+    <div class="demo-subtitle">// pick a site, trigger the tax</div>
+  </div>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="browser-url">
+        <span class="url-lock">🔒</span>
+        <span id="urlBar">twitter.com</span>
+      </div>
+    </div>
+
+    <div class="site-selector">
+      <span class="site-selector-label">// blocked sites:</span>
+      <button class="site-pill active" onclick="switchSite('twitter')">twitter.com</button>
+      <button class="site-pill" onclick="switchSite('reddit')">reddit.com</button>
+      <button class="site-pill" onclick="switchSite('youtube')">youtube.com</button>
+    </div>
+
+    <div class="simulated-site" id="siteContent">
+
+      <!-- Twitter sim -->
+      <div id="site-twitter" class="site-twitter">
+        <div class="twitter-header">
+          <div class="tw-tab active">For you</div>
+          <div class="tw-tab">Following</div>
+        </div>
+        <div class="tw-feed">
+          <div class="tw-post">
+            <div class="tw-avatar blue"></div>
+            <div class="tw-content">
+              <span class="tw-name">Product Hunt</span><span class="tw-handle">@ProductHunt · 2m</span>
+              <div class="tw-text">🚀 Focus Tax just launched — a browser extension that charges you 15 seconds of attention before you can doomscroll. Controversial? Yes. Necessary? Also yes.</div>
+              <div class="tw-actions"><span class="tw-action">💬 847</span><span class="tw-action">🔁 2.3K</span><span class="tw-action">❤️ 14.2K</span></div>
+            </div>
+          </div>
+          <div class="tw-post">
+            <div class="tw-avatar green"></div>
+            <div class="tw-content">
+              <span class="tw-name">Lex Fridman</span><span class="tw-handle">@lexfridman · 14m</span>
+              <div class="tw-text">The best things in life have friction. Learning, relationships, creating anything real. We've been optimizing the wrong variable.</div>
+              <div class="tw-actions"><span class="tw-action">💬 1.2K</span><span class="tw-action">🔁 8.7K</span><span class="tw-action">❤️ 62K</span></div>
+            </div>
+          </div>
+          <div class="tw-post">
+            <div class="tw-avatar purple"></div>
+            <div class="tw-content">
+              <span class="tw-name">Paul Graham</span><span class="tw-handle">@paulg · 1h</span>
+              <div class="tw-text">The most valuable skill of the next decade won't be coding. It'll be deciding what not to pay attention to.</div>
+              <div class="tw-actions"><span class="tw-action">💬 3.4K</span><span class="tw-action">🔁 19K</span><span class="tw-action">❤️ 89K</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reddit sim -->
+      <div id="site-reddit" class="site-reddit" style="display:none;">
+        <div class="rd-post">
+          <div class="rd-votes"><div class="rd-arrow up">▲</div><div class="rd-score">47k</div><div class="rd-arrow">▼</div></div>
+          <div class="rd-body">
+            <div class="rd-sub">r/productivity</div>
+            <div class="rd-title">I added a 30-second delay before opening Reddit and my life changed</div>
+            <div class="rd-meta">Posted by u/intentional_user · 6 hours ago · 2.3k comments</div>
+          </div>
+        </div>
+        <div class="rd-post">
+          <div class="rd-votes"><div class="rd-arrow up">▲</div><div class="rd-score">12k</div><div class="rd-arrow">▼</div></div>
+          <div class="rd-body">
+            <div class="rd-sub">r/technology</div>
+            <div class="rd-title">Focus Tax hackathon project adds mandatory friction to distraction sites — won 1st place</div>
+            <div class="rd-meta">Posted by u/techcrunch · 3 hours ago · 891 comments</div>
+          </div>
+        </div>
+        <div class="rd-post">
+          <div class="rd-votes"><div class="rd-arrow">▲</div><div class="rd-score">8.2k</div><div class="rd-arrow">▼</div></div>
+          <div class="rd-body">
+            <div class="rd-sub">r/philosophy</div>
+            <div class="rd-title">Is choosing to be distracted, when you had to actively choose it, still distraction?</div>
+            <div class="rd-meta">Posted by u/deep_thoughts_42 · 11 hours ago · 1.7k comments</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- YouTube sim -->
+      <div id="site-youtube" class="site-youtube" style="display:none;">
+        <div class="yt-grid">
+          <div class="yt-card">
+            <div class="yt-thumb a"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">Why your attention span isn't broken — it was stolen</div><div class="yt-sub">Veritasium · 4.2M views</div></div></div>
+          </div>
+          <div class="yt-card">
+            <div class="yt-thumb b"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">The neuroscience of distraction (and how to fight back)</div><div class="yt-sub">Andrew Huberman · 8.1M views</div></div></div>
+          </div>
+          <div class="yt-card">
+            <div class="yt-thumb c"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">I replaced doomscrolling with deliberate browsing for 30 days</div><div class="yt-sub">Ali Abdaal · 2.9M views</div></div></div>
+          </div>
+          <div class="yt-card">
+            <div class="yt-thumb d"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">Deep Work in 2025 — what actually works</div><div class="yt-sub">Cal Newport · 1.4M views</div></div></div>
+          </div>
+          <div class="yt-card">
+            <div class="yt-thumb e"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">The attention economy is eating your life</div><div class="yt-sub">Kurzgesagt · 12M views</div></div></div>
+          </div>
+          <div class="yt-card">
+            <div class="yt-thumb f"></div>
+            <div class="yt-info"><div class="yt-ch-icon"></div><div><div class="yt-title">Friction is a feature, not a bug — a product philosophy</div><div class="yt-sub">Y Combinator · 890K views</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOCUS OVERLAY -->
+      <div class="focus-overlay active" id="focusOverlay">
+        <div class="overlay-tag">// focus tax</div>
+        <div class="overlay-heading" id="overlayHeading">Before you scroll —</div>
+        <div class="overlay-sub" id="overlaySub">Pay 15 seconds of attention to proceed to <span id="siteNameLabel">twitter.com</span></div>
+
+        <div class="timer-ring-wrap">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="timer-track" cx="50" cy="50" r="45"/>
+            <circle class="timer-progress" cx="50" cy="50" r="45" id="timerRing"/>
+          </svg>
+          <div class="timer-center">
+            <div class="timer-num" id="timerNum">15</div>
+            <div class="timer-label">sec</div>
+          </div>
+        </div>
+
+        <div class="challenge-tabs">
+          <button class="challenge-tab active" onclick="switchChallenge('math')">math</button>
+          <button class="challenge-tab" onclick="switchChallenge('intent')">intent</button>
+          <button class="challenge-tab" onclick="switchChallenge('wait')">just wait</button>
+        </div>
+
+        <div class="challenge-panel active" id="panel-math">
+          <div class="math-question" id="mathQ">Loading...</div>
+          <input class="math-input" id="mathAnswer" type="number" placeholder="=" oninput="checkMath()" />
+        </div>
+
+        <div class="challenge-panel" id="panel-intent">
+          <div class="intent-prompt">In one sentence, why are you here right now?</div>
+          <textarea class="intent-input" id="intentAnswer" placeholder="I'm opening this because..." oninput="checkIntent()"></textarea>
+          <div class="intent-char" id="intentChar">0 / 20 chars to unlock</div>
+        </div>
+
+        <div class="challenge-panel" id="panel-wait">
+          <div class="intent-prompt" style="margin-bottom:0;">The timer is your only task.<br>Sit with it.</div>
+        </div>
+
+        <button class="overlay-proceed" id="proceedBtn" onclick="proceed()" disabled>Continue to site →</button>
+        <button class="overlay-bypass" onclick="bypass()">skip (research mode)</button>
+
+        <div class="overlay-quote">"You chose to slow down. What will you do with the attention you just protected?"</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="settings">
+  <div class="settings-inner">
+    <div class="settings-title">// extension settings</div>
+    <div class="settings-grid">
+
+      <div class="setting-card">
+        <div class="setting-card-title">Wait time</div>
+        <div class="setting-card-desc">How many seconds before the site unlocks. Longer = more intentional.</div>
+        <div class="setting-row">
+          <div class="slider-wrap">
+            <input type="range" min="5" max="60" value="15" id="timerSlider" oninput="updateTimer(this.value)">
+            <div class="slider-val" id="timerSliderVal">15s</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-card-title">Research mode</div>
+        <div class="setting-card-desc">Bypass friction for 30 minutes. For when you actually need to be there.</div>
+        <div class="setting-row">
+          <span style="font-size:13px; font-weight:300; color:var(--muted);">Disable friction temporarily</span>
+          <label class="toggle">
+            <input type="checkbox" id="researchToggle" onchange="toggleResearch(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-card-title">Challenge type</div>
+        <div class="setting-card-desc">How you pay the tax. Math for speed. Intent for depth.</div>
+        <div class="setting-row">
+          <select style="font-family: var(--mono); font-size: 12px; padding: 6px 10px; border: 0.5px solid var(--border-strong); border-radius: 3px; background: var(--paper); color: var(--ink); cursor: pointer;" onchange="switchChallenge(this.value)">
+            <option value="math">Math problem</option>
+            <option value="intent">Write your intent</option>
+            <option value="wait">Just wait</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-card-title">Strict mode</div>
+        <div class="setting-card-desc">Remove the "skip" button entirely. No escape hatch.</div>
+        <div class="setting-row">
+          <span style="font-size:13px; font-weight:300; color:var(--muted);">Hide bypass option</span>
+          <label class="toggle">
+            <input type="checkbox" id="strictToggle" onchange="toggleStrict(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- BUILD PLAN -->
+<div class="plan" id="plan">
+  <div class="plan-title">48-hour build plan</div>
+  <div class="plan-grid">
+    <div class="plan-day">
+      <div class="plan-day-header">
+        <div class="plan-day-title">Day 1</div>
+        <div class="plan-day-tag">foundation</div>
+      </div>
+      <div class="plan-tasks">
+        <div class="plan-task">
+          <div class="task-time">AM</div>
+          <div class="task-text"><strong>Setup:</strong> Manifest V3 structure, popup.html, chrome.storage wired up. Blocklist UI working.</div>
+        </div>
+        <div class="plan-task">
+          <div class="task-time">PM</div>
+          <div class="task-text"><strong>Core friction:</strong> URL detection → overlay injection → timer countdown → bypass on success.</div>
+        </div>
+        <div class="plan-task">
+          <div class="task-time">PM</div>
+          <div class="task-text"><strong>Challenge modes:</strong> Math problem generation + intent text input. Both unlock the page.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan-day">
+      <div class="plan-day-header">
+        <div class="plan-day-title">Day 2</div>
+        <div class="plan-day-tag">polish + ship</div>
+      </div>
+      <div class="plan-tasks">
+        <div class="plan-task">
+          <div class="task-time">AM</div>
+          <div class="task-text"><strong>Research mode toggle:</strong> 30-min bypass window. sessionStorage so refresh doesn't reset it.</div>
+        </div>
+        <div class="plan-task">
+          <div class="task-time">AM</div>
+          <div class="task-text"><strong>Edge cases:</strong> Handle refresh, new tab, iframe quirks, CSP restrictions in MV3.</div>
+        </div>
+        <div class="plan-task">
+          <div class="task-time">PM</div>
+          <div class="task-text"><strong>Demo + pitch:</strong> README, 90-second video, package as .zip. Lead with the stance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="stack">
+  <div class="stack-inner">
+    <div class="stack-title">// tech stack — no build step, no backend</div>
+    <div class="stack-row">
+      <div class="stack-chip"><div class="chip-dot"></div>Chrome Extension MV3</div>
+      <div class="stack-chip"><div class="chip-dot"></div>Vanilla JS</div>
+      <div class="stack-chip"><div class="chip-dot"></div>chrome.storage.local</div>
+      <div class="stack-chip"><div class="chip-dot"></div>chrome.scripting API</div>
+      <div class="stack-chip"><div class="chip-dot"></div>HTML / CSS overlay</div>
+      <div class="stack-chip"><div class="chip-dot"></div>Zero dependencies</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">FOCUS TAX — HACKATHON DEMO — 2025</div>
+  <div class="footer-stance">"We didn't build a blocker. We built a mirror."</div>
+</footer>
+
+<script>
+  // ── STATE ──
+  let timerInterval = null;
+  let timerDuration = 15;
+  let timeLeft = 15;
+  let currentChallenge = 'math';
+  let mathAnswer = null;
+  let currentSite = 'twitter';
+  let strictMode = false;
+
+  // ── MATH ──
+  function newMath() {
+    const a = Math.floor(Math.random() * 12) + 3;
+    const b = Math.floor(Math.random() * 12) + 3;
+    const ops = [
+      { q: `${a} × ${b}`, a: a * b },
+      { q: `${a * b} ÷ ${a}`, a: b },
+      { q: `${a} + ${b * 2}`, a: a + b * 2 },
+      { q: `${a * 3} − ${b}`, a: a * 3 - b },
+    ];
+    const pick = ops[Math.floor(Math.random() * ops.length)];
+    document.getElementById('mathQ').textContent = pick.q + ' = ?';
+    mathAnswer = pick.a;
+    document.getElementById('mathAnswer').value = '';
+    document.getElementById('mathAnswer').className = 'math-input';
+  }
+
+  function checkMath() {
+    const val = parseInt(document.getElementById('mathAnswer').value);
+    const inp = document.getElementById('mathAnswer');
+    if (val === mathAnswer) {
+      inp.classList.add('correct');
+      unlockProceed();
+    } else {
+      inp.classList.remove('correct');
+      lockProceed();
+    }
+  }
+
+  function checkIntent() {
+    const val = document.getElementById('intentAnswer').value.trim();
+    const charEl = document.getElementById('intentChar');
+    const needed = 20;
+    const have = val.length;
+    if (have >= needed) {
+      charEl.textContent = 'Ready to proceed';
+      charEl.style.color = 'rgba(245,240,232,0.6)';
+      unlockProceed();
+    } else {
+      charEl.textContent = `${have} / ${needed} chars to unlock`;
+      charEl.style.color = 'rgba(245,240,232,0.3)';
+      lockProceed();
+    }
+  }
+
+  function unlockProceed() {
+    const btn = document.getElementById('proceedBtn');
+    btn.disabled = false;
+    btn.classList.add('ready');
+  }
+
+  function lockProceed() {
+    const btn = document.getElementById('proceedBtn');
+    btn.disabled = true;
+    btn.classList.remove('ready');
+  }
+
+  // ── TIMER ──
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = timerDuration;
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        if (currentChallenge === 'wait') unlockProceed();
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    document.getElementById('timerNum').textContent = Math.max(0, timeLeft);
+    const pct = timeLeft / timerDuration;
+    const circumference = 283;
+    const offset = circumference * (1 - pct);
+    document.getElementById('timerRing').style.strokeDashoffset = offset;
+
+    if (currentChallenge === 'wait' && timeLeft <= 0) {
+      unlockProceed();
+    }
+  }
+
+  // ── CHALLENGE SWITCH ──
+  function switchChallenge(type) {
+    currentChallenge = type;
+    document.querySelectorAll('.challenge-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.challenge-panel').forEach(p => p.classList.remove('active'));
+
+    const tabIdx = { math: 0, intent: 1, wait: 2 };
+    const tabs = document.querySelectorAll('.challenge-tab');
+    if (tabs[tabIdx[type]]) tabs[tabIdx[type]].classList.add('active');
+
+    const panel = document.getElementById('panel-' + type);
+    if (panel) panel.classList.add('active');
+
+    lockProceed();
+    if (type === 'math') newMath();
+    startTimer();
+  }
+
+  // ── SITE SWITCH ──
+  function switchSite(site) {
+    currentSite = site;
+    document.querySelectorAll('.site-pill').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+
+    const sites = { twitter: 'twitter.com', reddit: 'reddit.com', youtube: 'youtube.com' };
+    document.getElementById('urlBar').textContent = sites[site];
+    document.getElementById('siteNameLabel').textContent = sites[site];
+
+    ['twitter', 'reddit', 'youtube'].forEach(s => {
+      document.getElementById('site-' + s).style.display = s === site ? '' : 'none';
+    });
+
+    showOverlay();
+    resetChallenge();
+  }
+
+  function showOverlay() {
+    document.getElementById('focusOverlay').classList.add('active');
+  }
+
+  function resetChallenge() {
+    lockProceed();
+    if (currentChallenge === 'math') newMath();
+    if (currentChallenge === 'intent') {
+      document.getElementById('intentAnswer').value = '';
+      document.getElementById('intentChar').textContent = '0 / 20 chars to unlock';
+    }
+    startTimer();
+  }
+
+  // ── PROCEED / BYPASS ──
+  function proceed() {
+    clearInterval(timerInterval);
+    document.getElementById('focusOverlay').classList.remove('active');
+    const flash = document.getElementById('successFlash');
+    flash.classList.add('show');
+    setTimeout(() => flash.classList.remove('show'), 2500);
+  }
+
+  function bypass() {
+    clearInterval(timerInterval);
+    document.getElementById('focusOverlay').classList.remove('active');
+  }
+
+  // ── SETTINGS ──
+  function updateTimer(val) {
+    timerDuration = parseInt(val);
+    document.getElementById('timerSliderVal').textContent = val + 's';
+    timeLeft = timerDuration;
+    updateTimerDisplay();
+    startTimer();
+  }
+
+  function toggleResearch(el) {
+    const overlay = document.getElementById('focusOverlay');
+    if (el.checked) {
+      overlay.classList.remove('active');
+      clearInterval(timerInterval);
+    } else {
+      overlay.classList.add('active');
+      resetChallenge();
+    }
+  }
+
+  function toggleStrict(el) {
+    strictMode = el.checked;
+    document.querySelector('.overlay-bypass').style.display = strictMode ? 'none' : '';
+  }
+
+  // ── INIT ──
+  newMath();
+  startTimer();
+</script>
+</body>
+</html>
