@@ -3,6 +3,7 @@ import styles from './Demo.module.css';
 import { BrowserChrome } from './BrowserChrome';
 import { SiteSelector } from './SiteSelector';
 import { ChallengePanel } from './ChallengePanel';
+import { Facebook } from './SiteMocks/Facebook';
 import { Twitter } from './SiteMocks/Twitter';
 import { Reddit } from './SiteMocks/Reddit';
 import { YouTube } from './SiteMocks/YouTube';
@@ -12,8 +13,16 @@ import { useIntentChallenge } from '../../hooks/useIntentChallenge';
 
 const siteNames = {
   twitter: 'twitter.com',
+  facebook: 'facebook.com',
   reddit: 'reddit.com',
   youtube: 'youtube.com',
+};
+
+const targetUrls = {
+  twitter: 'https://twitter.com',
+  facebook: 'https://facebook.com',
+  reddit: 'https://reddit.com',
+  youtube: 'https://youtube.com',
 };
 
 export const Demo = ({
@@ -27,6 +36,7 @@ export const Demo = ({
   onStrictChange,
 }) => {
   const [currentSite, setCurrentSite] = useState('twitter');
+  const [customUrl, setCustomUrl] = useState('https://en.wikipedia.org');
   const [isOverlayActive, setIsOverlayActive] = useState(true);
   const [showSuccessFlash, setShowSuccessFlash] = useState(false);
 
@@ -95,7 +105,8 @@ export const Demo = ({
     timer.stopTimer();
   };
 
-  const siteLabel = siteNames[currentSite];
+  const siteLabel = currentSite === 'custom' ? customUrl : siteNames[currentSite];
+  const urlBar = currentSite === 'custom' ? customUrl : (targetUrls[currentSite] || siteLabel);
 
   return (
     <div className={styles.demoSection} id="demo">
@@ -105,13 +116,27 @@ export const Demo = ({
         <div className={styles.subtitle}>// pick a site, trigger the tax</div>
       </div>
 
-      <BrowserChrome urlBar={siteLabel}>
-        <SiteSelector currentSite={currentSite} onSiteChange={handleSiteChange} />
+      <BrowserChrome urlBar={urlBar}>
+        <SiteSelector 
+          currentSite={currentSite} 
+          onSiteChange={handleSiteChange} 
+          customUrl={customUrl}
+          onCustomUrlChange={setCustomUrl}
+        />
 
         <div className={styles.siteContent}>
           {currentSite === 'twitter' ? <Twitter /> : null}
+          {currentSite === 'facebook' ? <Facebook /> : null}
           {currentSite === 'reddit' ? <Reddit /> : null}
           {currentSite === 'youtube' ? <YouTube /> : null}
+          {currentSite === 'custom' ? (
+            <iframe 
+              src={customUrl} 
+              className={styles.iframeSite} 
+              title="Custom site"
+              sandbox="allow-scripts allow-same-origin"
+            />
+          ) : null}
 
           {isOverlayActive ? (
             <div className={styles.focusOverlay}>

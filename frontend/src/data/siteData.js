@@ -43,6 +43,41 @@ export const siteData = {
       },
     ],
   },
+  facebook: {
+    name: 'facebook.com',
+    posts: [
+      {
+        id: 1,
+        avatar: 'blue',
+        name: 'Nir Eyal',
+        time: '1h',
+        text: 'The antidote to distraction is not less technology. It is more intention. Focus Tax is an interesting take on deliberate friction.',
+        likes: '3.1K',
+        comments: '482',
+        shares: '211',
+      },
+      {
+        id: 2,
+        avatar: 'green',
+        name: 'Maker Community',
+        time: '3h',
+        text: 'Hackathon highlight: a browser extension that asks for 15 seconds before opening distraction feeds. Simple, bold, and surprisingly effective.',
+        likes: '8.9K',
+        comments: '1.4K',
+        shares: '970',
+      },
+      {
+        id: 3,
+        avatar: 'purple',
+        name: 'Deep Work Society',
+        time: '6h',
+        text: 'If every click costs a little attention upfront, you stop clicking by default and start clicking with purpose.',
+        likes: '5.4K',
+        comments: '739',
+        shares: '403',
+      },
+    ],
+  },
   reddit: {
     name: 'reddit.com',
     posts: [

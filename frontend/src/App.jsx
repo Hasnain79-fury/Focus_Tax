@@ -41,8 +41,8 @@ function App() {
         strictMode={demo.strictMode}
         onStrictChange={demo.toggleStrictMode}
       />
-      <Plan />
-      <Stack />
+
+
       <Footer />
     </>
   );
