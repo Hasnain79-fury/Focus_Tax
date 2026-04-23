@@ -1,14 +1,13 @@
 from pydantic import BaseModel
-from typing import List
 
 class PuzzleResponse(BaseModel):
     puzzle_id: str
-    grid: List[List[int]]
-    difficulty: str
+    scrambled_word: str
+    word_length: int
 
 class MatchRequest(BaseModel):
     puzzle_id: str
-    solution: List[List[int]]
+    solution: str
 
 class MatchResponse(BaseModel):
     is_match: bool

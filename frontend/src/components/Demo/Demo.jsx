@@ -10,6 +10,7 @@ import { YouTube } from './SiteMocks/YouTube';
 import { useTimer } from '../../hooks/useTimer';
 import { useMathChallenge } from '../../hooks/useMathChallenge';
 import { useIntentChallenge } from '../../hooks/useIntentChallenge';
+import { usePuzzleChallenge } from '../../hooks/usePuzzleChallenge';
 
 const siteNames = {
   twitter: 'twitter.com',
@@ -42,6 +43,7 @@ export const Demo = ({
 
   const math = useMathChallenge();
   const intent = useIntentChallenge();
+  const puzzle = usePuzzleChallenge();
 
   const timer = useTimer(timerDuration, () => {
     if (challengeType === 'wait') {
@@ -57,6 +59,9 @@ export const Demo = ({
     }
     if (challengeType === 'intent') {
       intent.reset();
+    }
+    if (challengeType === 'puzzle') {
+      puzzle.reset();
     }
   };
 
@@ -80,13 +85,17 @@ export const Demo = ({
     if (challengeType === 'math' && !math.question) {
       math.generateNew();
     }
-  }, [challengeType, math]);
+    if (challengeType === 'puzzle' && !puzzle.scrambledWord && !puzzle.isLoading) {
+      puzzle.generateNew();
+    }
+  }, [challengeType, math.question, puzzle.scrambledWord, puzzle.isLoading]);
 
   const canProceed = useMemo(() => {
     if (challengeType === 'math') return math.isCorrect;
     if (challengeType === 'intent') return intent.isValid;
+    if (challengeType === 'puzzle') return puzzle.isCorrect;
     return timer.timeLeft === 0;
-  }, [challengeType, intent.isValid, math.isCorrect, timer.timeLeft]);
+  }, [challengeType, intent.isValid, math.isCorrect, puzzle.isCorrect, timer.timeLeft]);
 
   const handleSiteChange = (site) => {
     setCurrentSite(site);
@@ -170,6 +179,9 @@ export const Demo = ({
                 <button className={`${styles.challengeTab} ${challengeType === 'intent' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('intent')}>
                   intent
                 </button>
+                <button className={`${styles.challengeTab} ${challengeType === 'puzzle' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('puzzle')}>
+                  puzzle
+                </button>
                 <button className={`${styles.challengeTab} ${challengeType === 'wait' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('wait')}>
                   just wait
                 </button>
@@ -186,6 +198,11 @@ export const Demo = ({
                 intentMinChars={intent.minChars}
                 intentIsValid={intent.isValid}
                 onIntentChange={intent.handleChange}
+                puzzleWord={puzzle.scrambledWord}
+                puzzleInput={puzzle.userInput}
+                puzzleIsCorrect={puzzle.isCorrect}
+                onPuzzleChange={puzzle.checkAnswer}
+                puzzleIsLoading={puzzle.isLoading}
               />
 
               <button className={`${styles.proceedButton} ${canProceed ? styles.ready : ''}`} disabled={!canProceed} onClick={handleProceed}>

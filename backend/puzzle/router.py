@@ -2,27 +2,27 @@ from fastapi import APIRouter, HTTPException
 import uuid
 
 from .schemas import PuzzleResponse, MatchRequest, MatchResponse
-from .services import fetch_sudoku_puzzle, store_solution, check_solution
+from .services import fetch_word_puzzle, store_solution, check_solution
 
 router = APIRouter()
 
 @router.get("/get", response_model=PuzzleResponse)
 async def get_puzzle():
     """
-    Fetches a new puzzle from the Dosuku API and stores its solution temporarily.
+    Fetches a random word, scrambles it, and stores the solution temporarily.
     """
     try:
-        grid_data, solution = await fetch_sudoku_puzzle()
+        scrambled_word, original_word = await fetch_word_puzzle()
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Failed to fetch puzzle from external API: {str(e)}")
 
     puzzle_id = str(uuid.uuid4())
-    store_solution(puzzle_id, solution)
+    store_solution(puzzle_id, original_word)
 
     return PuzzleResponse(
         puzzle_id=puzzle_id,
-        grid=grid_data["value"],
-        difficulty=grid_data["difficulty"]
+        scrambled_word=scrambled_word,
+        word_length=len(original_word)
     )
 
 @router.post("/match", response_model=MatchResponse)

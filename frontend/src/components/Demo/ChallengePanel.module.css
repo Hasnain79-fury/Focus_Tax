@@ -80,3 +80,14 @@
 .char.valid {
   color: rgba(245, 240, 232, 0.6);
 }
+
+.scrambledWord {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}

@@ -11,6 +11,11 @@ export const ChallengePanel = ({
   intentMinChars,
   intentIsValid,
   onIntentChange,
+  puzzleWord,
+  puzzleInput,
+  puzzleIsCorrect,
+  onPuzzleChange,
+  puzzleIsLoading,
 }) => {
   if (mode === 'math') {
     return (
@@ -40,6 +45,26 @@ export const ChallengePanel = ({
         <div className={`${styles.char} ${intentIsValid ? styles.valid : ''}`}>
           {intentIsValid ? 'Ready to proceed' : `${intentCharCount} / ${intentMinChars} chars to unlock`}
         </div>
+      </div>
+    );
+  }
+
+  if (mode === 'puzzle') {
+    return (
+      <div className={styles.panel + ' ' + styles.active}>
+        <div className={styles.prompt}>Unscramble the word to proceed.</div>
+        <div className={styles.scrambledWord}>
+          {puzzleIsLoading ? 'Loading...' : (puzzleWord === 'error' ? 'Failed to load puzzle' : puzzleWord)}
+        </div>
+        <input
+          type="text"
+          className={`${styles.input} ${puzzleIsCorrect ? styles.correct : ''}`}
+          placeholder="Your guess..."
+          value={puzzleInput}
+          onChange={(e) => onPuzzleChange(e.target.value)}
+          disabled={puzzleIsLoading || puzzleWord === 'error'}
+          autoComplete="off"
+        />
       </div>
     );
   }
