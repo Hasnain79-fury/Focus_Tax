@@ -1,0 +1,39 @@
+.selector {
+  background: var(--paper);
+  padding: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+
+.pill {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 0.5px solid var(--border-strong);
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+  transition: all 0.15s;
+}
+
+.pill:hover {
+  background: var(--paper2);
+}
+
+.pill.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}

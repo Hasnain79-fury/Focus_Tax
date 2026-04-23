@@ -1,0 +1,83 @@
+.plan {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.day {
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dayHeader {
+  padding: 1rem 1.25rem;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dayTitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.dayTag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(245,240,232,0.5);
+}
+
+.tasks {
+  padding: 1rem 1.25rem;
+  background: var(--paper);
+}
+
+.task {
+  display: flex;
+  gap: 10px;
+  padding: 0.6rem 0;
+  border-bottom: 0.5px solid var(--border);
+  align-items: flex-start;
+}
+
+.task:last-child {
+  border-bottom: none;
+}
+
+.taskTime {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  padding-top: 2px;
+  min-width: 30px;
+}
+
+.taskText {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.taskText strong {
+  font-weight: 700;
+}

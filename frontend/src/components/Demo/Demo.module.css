@@ -1,0 +1,224 @@
+.demoSection {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.subtitle {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.siteContent {
+  position: relative;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.focusOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 17, 14, 0.97);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 2rem;
+}
+
+.overlayTag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.overlayHeading {
+  font-family: var(--serif);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 900;
+  color: var(--paper);
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  max-width: 480px;
+}
+
+.overlaySub {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(245,240,232,0.5);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.timerRingWrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 2rem;
+}
+
+.timerRingWrap svg {
+  transform: rotate(-90deg);
+}
+
+.timerTrack {
+  fill: none;
+  stroke: rgba(245,240,232,0.08);
+  stroke-width: 4;
+}
+
+.timerProgress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timerCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timerNum {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--paper);
+  line-height: 1;
+}
+
+.timerLabel {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(245,240,232,0.4);
+  text-transform: uppercase;
+}
+
+.challengeTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border: 0.5px solid rgba(245,240,232,0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.challengeTab {
+  padding: 8px 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(245,240,232,0.4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.activeTab {
+  background: rgba(245,240,232,0.1);
+  color: var(--paper);
+}
+
+.proceedButton {
+  margin-top: 1.5rem;
+  padding: 12px 32px;
+  background: var(--paper);
+  color: var(--ink);
+  border: none;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+  opacity: 0.4;
+}
+
+.ready {
+  opacity: 1;
+}
+
+.ready:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.bypassButton {
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(245,240,232,0.25);
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+
+.bypassButton:hover {
+  color: rgba(245,240,232,0.5);
+}
+
+.overlayQuote {
+  position: absolute;
+  bottom: 1.5rem;
+  font-family: var(--serif);
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(245,240,232,0.2);
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.successFlash {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent2);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  z-index: 999;
+  white-space: nowrap;
+}

@@ -1,0 +1,30 @@
+.stance {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding-top: 6px;
+}
+
+.body {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.body strong {
+  font-weight: 700;
+  font-style: italic;
+}

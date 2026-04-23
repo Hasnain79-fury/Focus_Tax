@@ -1,0 +1,134 @@
+.settings {
+  padding: 4rem 2rem;
+  background: var(--paper2);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+
+.inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--paper);
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.cardDesc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.inlineLabel {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  inset: 0;
+  background: var(--border-strong);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggleSlider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggleSlider {
+  background: var(--accent2);
+}
+
+.toggle input:checked + .toggleSlider::before {
+  transform: translateX(20px);
+}
+
+.sliderWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.sliderWrap input[type='range'] {
+  flex: 1;
+  accent-color: var(--ink);
+}
+
+.sliderVal {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+  min-width: 32px;
+  text-align: right;
+}
+
+.select {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}

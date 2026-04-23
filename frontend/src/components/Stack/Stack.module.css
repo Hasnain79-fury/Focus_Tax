@@ -1,0 +1,45 @@
+.stack {
+  background: var(--paper2);
+  padding: 4rem 2rem;
+  border-top: 0.5px solid var(--border);
+}
+
+.inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 8px 16px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent2);
+}
