@@ -20,9 +20,7 @@ export const Hero = () => {
         <a href="#demo" className={`${styles.btn} ${styles.btnPrimary}`}>
           Try the demo
         </a>
-        <a href="#plan" className={`${styles.btn} ${styles.btnSecondary}`}>
-          See the build plan
-        </a>
+
       </div>
     </div>
   );
