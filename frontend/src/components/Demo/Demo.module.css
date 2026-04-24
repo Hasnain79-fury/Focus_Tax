@@ -90,6 +90,28 @@
   margin-bottom: 2rem;
 }
 
+.simulateTime {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.simulateTime select {
+  background: var(--surface-light);
+  color: var(--ink);
+  border: 1px solid var(--border-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
 .timerRingWrap svg {
   transform: rotate(-90deg);
 }

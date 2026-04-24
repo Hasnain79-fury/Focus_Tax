@@ -1,12 +1,13 @@
 import { useState, useCallback } from 'react';
 
-export const usePuzzleChallenge = () => {
+export const usePuzzleChallenge = (requiredStreak = 1) => {
   const [puzzleId, setPuzzleId] = useState(null);
   const [scrambledWord, setScrambledWord] = useState('');
   const [userInput, setUserInput] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [streak, setStreak] = useState(0);
 
   const fetchNewPuzzle = useCallback(async () => {
     setIsLoading(true);
@@ -49,9 +50,24 @@ export const usePuzzleChallenge = () => {
       
       if (!response.ok) return false;
       const data = await response.json();
-      setIsCorrect(data.is_match);
+      
+      if (data.is_match) {
+        const newStreak = streak + 1;
+        setStreak(newStreak);
+        
+        if (newStreak >= requiredStreak) {
+          setIsCorrect(true);
+        } else {
+          // Immediately fetch next puzzle for streak
+          fetchNewPuzzle();
+        }
+      } else {
+        // Incorrect guess: do not reset streak
+        setIsCorrect(false);
+        setUserInput('');
+      }
       return data.is_match;
-    } catch (err) {
+    } catch {
       return false;
     }
   };
@@ -59,6 +75,7 @@ export const usePuzzleChallenge = () => {
   const reset = () => {
     setUserInput('');
     setIsCorrect(false);
+    setStreak(0);
     fetchNewPuzzle();
   };
 
@@ -68,6 +85,8 @@ export const usePuzzleChallenge = () => {
     isCorrect,
     isLoading,
     error,
+    streak,
+    requiredStreak,
     generateNew: fetchNewPuzzle,
     checkAnswer,
     reset,

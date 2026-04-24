@@ -91,3 +91,12 @@
   letter-spacing: 0.25em;
   text-transform: uppercase;
 }
+
+.streakIndicator {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent2);
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0.8;
+}

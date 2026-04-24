@@ -43,13 +43,30 @@ export const Demo = ({
   const [bypassStep, setBypassStep] = useState('idle');
   const [isBypassed, setIsBypassed] = useState(false);
   const [showBypassToast, setShowBypassToast] = useState(false);
+  const [taxRules, setTaxRules] = useState(null);
+  const [simulatedHour, setSimulatedHour] = useState(''); // empty means real time
+
+  const fetchTaxRules = async () => {
+    try {
+      const hourToUse = simulatedHour !== '' ? parseInt(simulatedHour, 10) : new Date().getHours();
+      const res = await fetch(`http://localhost:8000/api/tax/rules?local_hour=${hourToUse}`);
+      if (res.ok) {
+        const data = await res.json();
+        setTaxRules(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch tax rules", e);
+    }
+  };
 
   const math = useMathChallenge();
-  const intent = useIntentChallenge();
-  const puzzle = usePuzzleChallenge();
+  const intent = useIntentChallenge(taxRules?.min_chars || 20);
+  const puzzle = usePuzzleChallenge(taxRules?.required_puzzle_streak || 1);
+
+  const activeChallengeType = taxRules?.forced_challenge || challengeType;
 
   const timer = useTimer(timerDuration, () => {
-    if (challengeType === 'wait') {
+    if (activeChallengeType === 'wait') {
       setIsOverlayActive(false);
     }
   });
@@ -59,6 +76,7 @@ export const Demo = ({
     setBypassStep('idle');
     setIsBypassed(false);
     timer.startTimer();
+    fetchTaxRules();
     if (challengeType === 'math') {
       math.generateNew();
     }
@@ -87,20 +105,25 @@ export const Demo = ({
   }, [researchMode]);
 
   useEffect(() => {
-    if (challengeType === 'math' && !math.question) {
+    fetchTaxRules();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [simulatedHour]);
+
+  useEffect(() => {
+    if (activeChallengeType === 'math' && !math.question) {
       math.generateNew();
     }
-    if (challengeType === 'puzzle' && !puzzle.scrambledWord && !puzzle.isLoading) {
+    if (activeChallengeType === 'puzzle' && !puzzle.scrambledWord && !puzzle.isLoading) {
       puzzle.generateNew();
     }
-  }, [challengeType, math.question, puzzle.scrambledWord, puzzle.isLoading]);
+  }, [activeChallengeType, math.question, puzzle.scrambledWord, puzzle.isLoading]);
 
   const canProceed = useMemo(() => {
-    if (challengeType === 'math') return math.isCorrect;
-    if (challengeType === 'intent') return intent.isValid;
-    if (challengeType === 'puzzle') return puzzle.isCorrect;
+    if (activeChallengeType === 'math') return math.isCorrect;
+    if (activeChallengeType === 'intent') return intent.isValid;
+    if (activeChallengeType === 'puzzle') return puzzle.isCorrect;
     return timer.timeLeft === 0;
-  }, [challengeType, intent.isValid, math.isCorrect, puzzle.isCorrect, timer.timeLeft]);
+  }, [activeChallengeType, intent.isValid, math.isCorrect, puzzle.isCorrect, timer.timeLeft]);
 
   const handleSiteChange = (site) => {
     setCurrentSite(site);
@@ -138,6 +161,14 @@ export const Demo = ({
       <div className={styles.header}>
         <div className={styles.title}>Live demo</div>
         <div className={styles.subtitle}>// pick a site, trigger the tax</div>
+        <div className={styles.simulateTime}>
+          <label>Simulate Time: </label>
+          <select value={simulatedHour} onChange={(e) => setSimulatedHour(e.target.value)}>
+            <option value="">Real Time</option>
+            <option value="12">12:00 PM (Day)</option>
+            <option value="2">2:00 AM (Late Night)</option>
+          </select>
+        </div>
       </div>
 
       <BrowserChrome urlBar={urlBar}>
@@ -169,7 +200,7 @@ export const Demo = ({
               {bypassStep === 'idle' && (
                 <>
                   <div className={styles.overlayTag}>// focus tax</div>
-                  <div className={styles.overlayHeading}>Before you scroll —</div>
+                  <div className={styles.overlayHeading}>{taxRules?.message || 'Before you scroll —'}</div>
                   <div className={styles.overlaySub}>
                     Pay {timerDuration} seconds of attention to proceed to <span>{siteLabel}</span>
                   </div>
@@ -191,23 +222,25 @@ export const Demo = ({
                     </div>
                   </div>
 
-                  <div className={styles.challengeTabs}>
-                    <button className={`${styles.challengeTab} ${challengeType === 'math' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('math')}>
-                      math
-                    </button>
-                    <button className={`${styles.challengeTab} ${challengeType === 'intent' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('intent')}>
-                      intent
-                    </button>
-                    <button className={`${styles.challengeTab} ${challengeType === 'puzzle' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('puzzle')}>
-                      puzzle
-                    </button>
-                    <button className={`${styles.challengeTab} ${challengeType === 'wait' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('wait')}>
-                      just wait
-                    </button>
-                  </div>
+                  {!taxRules?.is_late_night && (
+                    <div className={styles.challengeTabs}>
+                      <button className={`${styles.challengeTab} ${challengeType === 'math' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('math')}>
+                        math
+                      </button>
+                      <button className={`${styles.challengeTab} ${challengeType === 'intent' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('intent')}>
+                        intent
+                      </button>
+                      <button className={`${styles.challengeTab} ${challengeType === 'puzzle' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('puzzle')}>
+                        puzzle
+                      </button>
+                      <button className={`${styles.challengeTab} ${challengeType === 'wait' ? styles.activeTab : ''}`} onClick={() => onChallengeChange('wait')}>
+                        just wait
+                      </button>
+                    </div>
+                  )}
 
                   <ChallengePanel
-                    mode={challengeType}
+                    mode={activeChallengeType}
                     mathQuestion={math.question || 'Loading...'}
                     mathInput={math.userInput}
                     mathIsCorrect={math.isCorrect}
@@ -222,6 +255,8 @@ export const Demo = ({
                     puzzleIsCorrect={puzzle.isCorrect}
                     onPuzzleChange={puzzle.checkAnswer}
                     puzzleIsLoading={puzzle.isLoading}
+                    puzzleStreak={puzzle.streak}
+                    puzzleRequiredStreak={puzzle.requiredStreak}
                   />
 
                   <button className={`${styles.proceedButton} ${canProceed ? styles.ready : ''}`} disabled={!canProceed} onClick={handleProceed}>

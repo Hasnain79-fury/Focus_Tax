@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Tax",
+  "version": "1.0",
+  "description": "Pay attention before you spend it.",
+  "permissions": ["tabs", "storage", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

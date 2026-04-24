@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <div class="tag">// focus tax</div>
+    <h2>Settings</h2>
+  </div>
+  
+  <div class="section">
+    <label>Blocked Sites</label>
+    <div class="add-site">
+      <input type="text" id="site-input" placeholder="e.g. reddit.com">
+      <button id="add-btn">+</button>
+    </div>
+    <ul id="site-list"></ul>
+  </div>
+
+  <div class="section">
+    <label>Wait Time (seconds)</label>
+    <div class="slider-wrap">
+      <input type="range" id="time-slider" min="5" max="60" value="15">
+      <span id="time-display">15s</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <label>Default Challenge</label>
+    <select id="challenge-select">
+      <option value="math">Math</option>
+      <option value="intent">Intent</option>
+      <option value="wait">Just Wait</option>
+    </select>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

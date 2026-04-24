@@ -16,6 +16,8 @@ export const ChallengePanel = ({
   puzzleIsCorrect,
   onPuzzleChange,
   puzzleIsLoading,
+  puzzleStreak,
+  puzzleRequiredStreak,
 }) => {
   if (mode === 'math') {
     return (
@@ -65,6 +67,11 @@ export const ChallengePanel = ({
           disabled={puzzleIsLoading || puzzleWord === 'error'}
           autoComplete="off"
         />
+        {puzzleRequiredStreak > 1 && (
+          <div className={styles.streakIndicator}>
+            Solved: {puzzleStreak} / {puzzleRequiredStreak}
+          </div>
+        )}
       </div>
     );
   }

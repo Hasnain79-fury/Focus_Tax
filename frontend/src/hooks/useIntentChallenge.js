@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
-const MIN_CHARS = 20;
-
-export const useIntentChallenge = () => {
+export const useIntentChallenge = (minChars = 20) => {
   const [value, setValue] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [isValid, setIsValid] = useState(false);
@@ -12,7 +10,7 @@ export const useIntentChallenge = () => {
     const trimmed = newValue.trim();
     const count = trimmed.length;
     setCharCount(count);
-    setIsValid(count >= MIN_CHARS);
+    setIsValid(count >= minChars);
   };
 
   const reset = () => {
@@ -24,7 +22,7 @@ export const useIntentChallenge = () => {
   return {
     value,
     charCount,
-    minChars: MIN_CHARS,
+    minChars,
     isValid,
     handleChange,
     reset,

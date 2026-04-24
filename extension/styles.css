@@ -1,0 +1,300 @@
+#focus-tax-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 17, 14, 0.97);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f5f0e8;
+}
+
+.ft-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+}
+
+.ft-tag {
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #d4cfc5;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.ft-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  margin: 0 0 0.75rem 0;
+}
+
+.ft-sub {
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(245,240,232,0.5);
+  text-align: center;
+  margin: 0 0 2.5rem 0;
+}
+
+.ft-sub span {
+  font-weight: bold;
+}
+
+.ft-timer-wrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 2rem;
+}
+
+.ft-timer-wrap svg {
+  transform: rotate(-90deg);
+}
+
+.ft-track {
+  fill: none;
+  stroke: rgba(245,240,232,0.08);
+  stroke-width: 4;
+}
+
+.ft-progress {
+  fill: none;
+  stroke: #d4cfc5;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.ft-timer-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ft-timer-num {
+  font-family: monospace;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.ft-timer-label {
+  font-family: monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.4);
+}
+
+.ft-tabs {
+  display: flex;
+  border: 0.5px solid rgba(245,240,232,0.15);
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.ft-tab {
+  background: transparent;
+  color: rgba(245,240,232,0.4);
+  border: none;
+  padding: 8px 18px;
+  font-family: monospace;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ft-tab.active {
+  background: rgba(245,240,232,0.1);
+  color: #f5f0e8;
+}
+
+.ft-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ft-math-q {
+  font-size: 24px;
+  font-family: monospace;
+}
+
+.ft-input {
+  background: rgba(245,240,232,0.05);
+  border: 1px solid rgba(245,240,232,0.2);
+  color: #f5f0e8;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 18px;
+  width: 100px;
+  text-align: center;
+}
+
+.ft-textarea {
+  width: 100%;
+  min-width: 300px;
+  background: rgba(245,240,232,0.05);
+  border: 1px solid rgba(245,240,232,0.2);
+  color: #f5f0e8;
+  padding: 12px;
+  border-radius: 4px;
+  font-family: monospace;
+  height: 80px;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.ft-input.ft-success, .ft-textarea.ft-success {
+  border-color: #28c840;
+}
+
+.ft-char-count {
+  font-family: monospace;
+  font-size: 10px;
+  color: rgba(245,240,232,0.4);
+}
+
+.ft-wait-msg {
+  font-style: italic;
+  color: rgba(245,240,232,0.5);
+}
+
+#ft-proceed {
+  margin-top: 2rem;
+  padding: 12px 32px;
+  background: #f5f0e8;
+  color: #14110e;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: all 0.2s;
+}
+
+#ft-proceed.ready {
+  opacity: 1;
+}
+
+#ft-bypass-init {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: rgba(245,240,232,0.3);
+  font-family: monospace;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ft-quote {
+  position: absolute;
+  bottom: 2rem;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(245,240,232,0.2);
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Bypass Flow */
+.ft-bypass-card {
+  gap: 2rem;
+  animation: ftFadeIn 0.3s;
+}
+
+@keyframes ftFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ft-bypass-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.ft-btn-ghost {
+  padding: 10px 24px;
+  background: transparent;
+  color: #f5f0e8;
+  border: 1px solid rgba(245,240,232,0.3);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ft-btn-solid {
+  padding: 10px 24px;
+  background: #d4cfc5;
+  color: #14110e;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ft-reason-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.ft-reason-btn {
+  padding: 14px;
+  background: rgba(245,240,232,0.05);
+  border: 1px solid rgba(245,240,232,0.1);
+  color: #f5f0e8;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ft-delay-text {
+  font-family: monospace;
+  animation: ftPulse 1.5s infinite;
+}
+
+@keyframes ftPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+#ft-toast {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5e00;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  z-index: 2147483648;
+}
+
+#ft-research-badge {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: #14110e;
+  color: #f5f0e8;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-family: monospace;
+  font-size: 10px;
+  border: 1px solid rgba(245,240,232,0.2);
+  z-index: 2147483648;
+}
