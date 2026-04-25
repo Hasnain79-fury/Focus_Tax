@@ -43,3 +43,15 @@
   border-radius: 50%;
   background: var(--accent2);
 }
+
+@media (max-width: 768px) {
+  .stack {
+    padding: 3rem 1.5rem;
+  }
+  .row {
+    flex-direction: column;
+  }
+  .chip {
+    justify-content: center;
+  }
+}

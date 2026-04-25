@@ -365,3 +365,32 @@
   border: 1px solid var(--border-strong);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
+@media (max-width: 768px) {
+  .demoSection {
+    padding: 3rem 1.5rem;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .simulateTime {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .siteContent {
+    min-height: 500px;
+  }
+  .iframeSite {
+    height: 500px;
+  }
+  .challengeTabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .challengeTab {
+    flex: 1 1 40%;
+    text-align: center;
+  }
+}
