@@ -48,8 +48,10 @@ export const Demo = ({
 
   const fetchTaxRules = async () => {
     try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const hourToUse = simulatedHour !== '' ? parseInt(simulatedHour, 10) : new Date().getHours();
-      const res = await fetch(`http://localhost:8000/api/tax/rules?local_hour=${hourToUse}`);
+      const headers = import.meta.env.VITE_API_TOKEN ? { 'Authorization': `Bearer ${import.meta.env.VITE_API_TOKEN}` } : {};
+      const res = await fetch(`${API_URL}/api/tax/rules?local_hour=${hourToUse}`, { headers });
       if (res.ok) {
         const data = await res.json();
         setTaxRules(data);

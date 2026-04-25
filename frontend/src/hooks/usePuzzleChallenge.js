@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
 export const usePuzzleChallenge = (requiredStreak = 1) => {
   const [puzzleId, setPuzzleId] = useState(null);
   const [scrambledWord, setScrambledWord] = useState('');
@@ -16,7 +18,8 @@ export const usePuzzleChallenge = (requiredStreak = 1) => {
     setIsCorrect(false);
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/puzzle/get');
+      const headers = import.meta.env.VITE_API_TOKEN ? { 'Authorization': `Bearer ${import.meta.env.VITE_API_TOKEN}` } : {};
+      const response = await fetch(`${API_URL}/api/puzzle/get`, { headers });
       if (!response.ok) throw new Error('Failed to fetch puzzle');
       const data = await response.json();
       
@@ -39,9 +42,13 @@ export const usePuzzleChallenge = (requiredStreak = 1) => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/puzzle/match', {
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(import.meta.env.VITE_API_TOKEN ? { 'Authorization': `Bearer ${import.meta.env.VITE_API_TOKEN}` } : {})
+      };
+      const response = await fetch(`${API_URL}/api/puzzle/match`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           puzzle_id: puzzleId,
           solution: value
