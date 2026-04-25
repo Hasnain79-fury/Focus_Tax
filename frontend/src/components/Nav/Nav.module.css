@@ -29,3 +29,9 @@
   color: var(--muted);
   letter-spacing: 0.08em;
 }
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+}

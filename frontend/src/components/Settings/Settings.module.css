@@ -132,3 +132,13 @@
   color: var(--ink);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .settings {
+    padding: 3rem 1.5rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
