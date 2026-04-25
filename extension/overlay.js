@@ -16,7 +16,7 @@ if (sessionStorage.getItem('focusTaxPassed') === 'true') {
 } else {
   // Hide the page immediately to prevent seeing the blocked site
   document.documentElement.style.visibility = 'hidden';
-  
+
   if (document.body) {
     initOverlay();
   } else {
@@ -24,10 +24,25 @@ if (sessionStorage.getItem('focusTaxPassed') === 'true') {
   }
 }
 
+const PUZZLE_WORDS = ['focus', 'breathe', 'pause', 'calm', 'steady', 'intent', 'reflect', 'clarity'];
+
+function scrambleWord(word) {
+  let arr = word.split('');
+  let scrambled = word;
+  while (scrambled === word && word.length > 1) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    scrambled = arr.join('');
+  }
+  return scrambled;
+}
+
 function initOverlay() {
   // Restore visibility so the overlay can be seen
   document.documentElement.style.visibility = '';
-  
+
   // Hide document scroll but don't hide everything (so it serves as background)
   const originalOverflow = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
@@ -38,19 +53,30 @@ function initOverlay() {
     let challengeType = res.challengeType || 'math';
     let timeLeft = timerDuration;
 
+    const hour = new Date().getHours();
+    // TODO: Revert this back to `hour >= 23 || hour <= 4` after testing!
+    //const isLateNight = true; // FORCE NIGHT MODE FOR TESTING
+    const isLateNight = hour >= 23 || hour <= 4;
+    let puzzleRequiredStreak = 1;
+
+    if (isLateNight) {
+      challengeType = 'puzzle';
+      puzzleRequiredStreak = 5;
+    }
+
     // Create overlay
     const overlay = document.createElement('div');
     overlay.id = 'focus-tax-overlay';
-    
+
     function renderState(state) {
       if (state === 'idle') {
         overlay.innerHTML = `
           <div class="ft-inner">
             <div class="ft-tag">// focus tax</div>
-            <h1 class="ft-title">Before you scroll —</h1>
-            <p class="ft-sub">Pay ${timerDuration} seconds of attention to proceed to <span>${window.location.hostname}</span></p>
+            <h1 class="ft-title">${isLateNight ? "It's late. Your brain needs to rest." : "Before you scroll —"}</h1>
+            <p class="ft-sub">${isLateNight ? `Complete ${puzzleRequiredStreak} puzzles to proceed to <span>${window.location.hostname}</span>` : `Pay ${timerDuration} seconds of attention to proceed to <span>${window.location.hostname}</span>`}</p>
             
-            <div class="ft-timer-wrap">
+            <div class="ft-timer-wrap" ${isLateNight ? 'style="display: none;"' : ''}>
               <svg width="100" height="100" viewBox="0 0 100 100">
                 <circle class="ft-track" cx="50" cy="50" r="45" />
                 <circle class="ft-progress" cx="50" cy="50" r="45" id="ft-circle" />
@@ -61,11 +87,14 @@ function initOverlay() {
               </div>
             </div>
 
+            ${isLateNight ? '' : `
             <div class="ft-tabs">
               <button class="ft-tab ${challengeType === 'math' ? 'active' : ''}" data-type="math">math</button>
               <button class="ft-tab ${challengeType === 'intent' ? 'active' : ''}" data-type="intent">intent</button>
+              <button class="ft-tab ${challengeType === 'puzzle' ? 'active' : ''}" data-type="puzzle">puzzle</button>
               <button class="ft-tab ${challengeType === 'wait' ? 'active' : ''}" data-type="wait">just wait</button>
             </div>
+            `}
 
             <div id="ft-challenge-container"></div>
 
@@ -117,13 +146,16 @@ function initOverlay() {
     let intervalId;
     let isMathCorrect = false;
     let isIntentValid = false;
+    let isPuzzleCorrect = false;
+    let puzzleStreak = 0;
+    let currentPuzzleWord = '';
 
     function setupIdleState() {
       const timerEl = document.getElementById('ft-timer');
       const circleEl = document.getElementById('ft-circle');
       const proceedBtn = document.getElementById('ft-proceed');
       const container = document.getElementById('ft-challenge-container');
-      
+
       // Setup tabs
       document.querySelectorAll('.ft-tab').forEach(tab => {
         tab.onclick = (e) => {
@@ -166,6 +198,41 @@ function initOverlay() {
           checkProceed();
         });
         isIntentValid = false;
+      } else if (challengeType === 'puzzle') {
+        const renderPuzzle = () => {
+          currentPuzzleWord = PUZZLE_WORDS[Math.floor(Math.random() * PUZZLE_WORDS.length)];
+          const scrambled = scrambleWord(currentPuzzleWord);
+
+          container.innerHTML = `
+            <div class="ft-panel">
+              <div class="ft-puzzle-word">${scrambled}</div>
+              <input type="text" id="ft-puzzle-input" placeholder="Your guess..." class="ft-input" autocomplete="off" />
+              ${puzzleRequiredStreak > 1 ? `<div class="ft-streak-indicator">Solved: ${puzzleStreak} / ${puzzleRequiredStreak}</div>` : ''}
+            </div>
+          `;
+
+          const inputEl = document.getElementById('ft-puzzle-input');
+          inputEl.focus();
+          inputEl.addEventListener('input', (e) => {
+            const val = e.target.value.trim().toLowerCase();
+            if (val.length === currentPuzzleWord.length) {
+              if (val === currentPuzzleWord) {
+                puzzleStreak++;
+                if (puzzleStreak >= puzzleRequiredStreak) {
+                  isPuzzleCorrect = true;
+                  e.target.classList.add('ft-success');
+                  checkProceed();
+                } else {
+                  renderPuzzle();
+                }
+              } else {
+                e.target.value = '';
+              }
+            }
+          });
+        };
+        renderPuzzle();
+        isPuzzleCorrect = false;
       } else {
         container.innerHTML = `<div class="ft-panel"><div class="ft-wait-msg">Take a deep breath.</div></div>`;
       }
@@ -174,8 +241,9 @@ function initOverlay() {
         let canProceed = false;
         if (challengeType === 'math') canProceed = isMathCorrect;
         else if (challengeType === 'intent') canProceed = isIntentValid;
+        else if (challengeType === 'puzzle') canProceed = isPuzzleCorrect;
         else canProceed = (timeLeft <= 0); // 'wait' mode
-        
+
         if (canProceed) {
           proceedBtn.disabled = false;
           proceedBtn.classList.add('ready');
@@ -187,14 +255,14 @@ function initOverlay() {
 
       // Timer Logic (avoid multiple intervals)
       clearInterval(intervalId);
-      
+
       function updateTimerDisplay() {
         timerEl.textContent = timeLeft;
         const offset = 283 * (1 - (timeLeft / timerDuration));
         circleEl.style.strokeDashoffset = offset;
         checkProceed();
       }
-      
+
       updateTimerDisplay(); // Initial update
 
       if (timeLeft > 0) {
@@ -221,7 +289,7 @@ function initOverlay() {
       }
       document.body.style.overflow = originalOverflow;
       overlay.remove();
-      
+
       // Show toast
       const toast = document.createElement('div');
       toast.id = 'ft-toast';

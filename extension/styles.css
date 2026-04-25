@@ -31,6 +31,7 @@
 .ft-title {
   font-size: 36px;
   font-weight: 900;
+  color: rgba(245, 240, 232, 0.8);
   text-align: center;
   margin: 0 0 0.75rem 0;
 }
@@ -38,7 +39,7 @@
 .ft-sub {
   font-size: 15px;
   font-style: italic;
-  color: rgba(245,240,232,0.5);
+  color: rgba(245, 240, 232, 0.5);
   text-align: center;
   margin: 0 0 2.5rem 0;
 }
@@ -60,7 +61,7 @@
 
 .ft-track {
   fill: none;
-  stroke: rgba(245,240,232,0.08);
+  stroke: rgba(245, 240, 232, 0.08);
   stroke-width: 4;
 }
 
@@ -92,19 +93,19 @@
   font-family: monospace;
   font-size: 9px;
   text-transform: uppercase;
-  color: rgba(245,240,232,0.4);
+  color: rgba(245, 240, 232, 0.4);
 }
 
 .ft-tabs {
   display: flex;
-  border: 0.5px solid rgba(245,240,232,0.15);
+  border: 0.5px solid rgba(245, 240, 232, 0.15);
   border-radius: 4px;
   margin-bottom: 1.5rem;
 }
 
 .ft-tab {
   background: transparent;
-  color: rgba(245,240,232,0.4);
+  color: rgba(245, 240, 232, 0.4);
   border: none;
   padding: 8px 18px;
   font-family: monospace;
@@ -113,7 +114,7 @@
 }
 
 .ft-tab.active {
-  background: rgba(245,240,232,0.1);
+  background: rgba(245, 240, 232, 0.1);
   color: #f5f0e8;
 }
 
@@ -131,8 +132,8 @@
 }
 
 .ft-input {
-  background: rgba(245,240,232,0.05);
-  border: 1px solid rgba(245,240,232,0.2);
+  background: rgba(245, 240, 232, 0.05);
+  border: 1px solid rgba(245, 240, 232, 0.2);
   color: #f5f0e8;
   padding: 10px;
   border-radius: 4px;
@@ -145,8 +146,8 @@
 .ft-textarea {
   width: 100%;
   min-width: 300px;
-  background: rgba(245,240,232,0.05);
-  border: 1px solid rgba(245,240,232,0.2);
+  background: rgba(245, 240, 232, 0.05);
+  border: 1px solid rgba(245, 240, 232, 0.2);
   color: #f5f0e8;
   padding: 12px;
   border-radius: 4px;
@@ -156,19 +157,20 @@
   transition: border-color 0.2s;
 }
 
-.ft-input.ft-success, .ft-textarea.ft-success {
+.ft-input.ft-success,
+.ft-textarea.ft-success {
   border-color: #28c840;
 }
 
 .ft-char-count {
   font-family: monospace;
   font-size: 10px;
-  color: rgba(245,240,232,0.4);
+  color: rgba(245, 240, 232, 0.4);
 }
 
 .ft-wait-msg {
   font-style: italic;
-  color: rgba(245,240,232,0.5);
+  color: rgba(245, 240, 232, 0.5);
 }
 
 #ft-proceed {
@@ -192,7 +194,7 @@
   margin-top: 1rem;
   background: none;
   border: none;
-  color: rgba(245,240,232,0.3);
+  color: rgba(245, 240, 232, 0.3);
   font-family: monospace;
   font-size: 11px;
   text-decoration: underline;
@@ -204,7 +206,7 @@
   bottom: 2rem;
   font-style: italic;
   font-size: 12px;
-  color: rgba(245,240,232,0.2);
+  color: rgba(245, 240, 232, 0.2);
   max-width: 400px;
   text-align: center;
 }
@@ -216,8 +218,15 @@
 }
 
 @keyframes ftFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .ft-bypass-actions {
@@ -229,7 +238,7 @@
   padding: 10px 24px;
   background: transparent;
   color: #f5f0e8;
-  border: 1px solid rgba(245,240,232,0.3);
+  border: 1px solid rgba(245, 240, 232, 0.3);
   border-radius: 4px;
   cursor: pointer;
 }
@@ -254,8 +263,8 @@
 
 .ft-reason-btn {
   padding: 14px;
-  background: rgba(245,240,232,0.05);
-  border: 1px solid rgba(245,240,232,0.1);
+  background: rgba(245, 240, 232, 0.05);
+  border: 1px solid rgba(245, 240, 232, 0.1);
   color: #f5f0e8;
   border-radius: 6px;
   cursor: pointer;
@@ -267,8 +276,15 @@
 }
 
 @keyframes ftPulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 #ft-toast {
@@ -295,6 +311,26 @@
   border-radius: 100px;
   font-family: monospace;
   font-size: 10px;
-  border: 1px solid rgba(245,240,232,0.2);
+  border: 1px solid rgba(245, 240, 232, 0.2);
   z-index: 2147483648;
+}
+
+.ft-puzzle-word {
+  font-family: monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.ft-streak-indicator {
+  font-family: monospace;
+  font-size: 11px;
+  color: #d4cfc5;
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0.8;
 }
